@@ -10,9 +10,9 @@ def palind(r):
 	return True
 
 
-r = (1,2,3,3,2,1)
+r = input("Enter:")
 
 if(palind(r)):
-	print("The Tuple is Flip-Flop")
+	print("The Tuple is a palindrome")
 else:
-	print("The Tuple is not Flip-Flop")
+	print("The Tuple is not a palindrome")
