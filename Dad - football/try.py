@@ -1,3 +1,6 @@
+import turtle
+import tkinter as tk
+from tkinter import messagebox
 import random
 
 # Define a dictionary to store player stats
@@ -6,58 +9,13 @@ players = {
     "Cristiano Ronaldo": {"pace": 76, "shooting": 88, "passing": 77, "dribbling": 80, "defending": 39, "physicality": 79},
     "Kylian Mbappé": {"pace": 97, "shooting": 88, "passing": 78, "dribbling": 90, "defending": 41, "physicality": 79},
     "Neymar Jr.": {"pace": 89, "shooting": 83, "passing": 86, "dribbling": 94, "defending": 37, "physicality": 58},
-    "Robert Lewandowski": {"pace": 75, "shooting": 91, "passing": 79, "dribbling": 85, "defending": 44, "physicality": 82},
-    "Kevin De Bruyne": {"pace": 74, "shooting": 85, "passing": 93, "dribbling": 87, "defending": 64, "physicality": 78},
-    "Mohamed Salah": {"pace": 93, "shooting": 87, "passing": 82, "dribbling": 90, "defending": 45, "physicality": 75},
-    "Harry Kane": {"pace": 70, "shooting": 91, "passing": 83, "dribbling": 81, "defending": 47, "physicality": 82},
-    "Virgil van Dijk": {"pace": 79, "shooting": 60, "passing": 71, "dribbling": 70, "defending": 90, "physicality": 86},
-    "Luka Modric": {"pace": 72, "shooting": 76, "passing": 89, "dribbling": 88, "defending": 69, "physicality": 67},
-    "Sadio Mané": {"pace": 89, "shooting": 84, "passing": 80, "dribbling": 90, "defending": 50, "physicality": 75},
-    "Karim Benzema": {"pace": 79, "shooting": 90, "passing": 83, "dribbling": 87, "defending": 40, "physicality": 82},
-    "Raheem Sterling": {"pace": 91, "shooting": 80, "passing": 77, "dribbling": 86, "defending": 45, "physicality": 69},
-    "Bruno Fernandes": {"pace": 76, "shooting": 84, "passing": 89, "dribbling": 83, "defending": 65, "physicality": 72},
-    "Phil Foden": {"pace": 84, "shooting": 79, "passing": 82, "dribbling": 89, "defending": 45, "physicality": 60},
-    "Ederson": {"pace": 61, "shooting": 20, "passing": 55, "dribbling": 50, "defending": 87, "physicality": 90},
-    "Manuel Neuer": {"pace": 60, "shooting": 28, "passing": 50, "dribbling": 50, "defending": 50, "physicality": 87},
-    "Alisson Becker": {"pace": 62, "shooting": 30, "passing": 55, "dribbling": 50, "defending": 90, "physicality": 88},
-    "Erling Haaland": {"pace": 89, "shooting": 93, "passing": 65, "dribbling": 80, "defending": 45, "physicality": 88},
-    "Sergio Ramos": {"pace": 72, "shooting": 62, "passing": 71, "dribbling": 70, "defending": 89, "physicality": 84},
-    "Achraf Hakimi": {"pace": 96, "shooting": 70, "passing": 75, "dribbling": 80, "defending": 70, "physicality": 73},
-    "João Cancelo": {"pace": 85, "shooting": 68, "passing": 83, "dribbling": 82, "defending": 79, "physicality": 71},
-    "Antonio Rudiger": {"pace": 82, "shooting": 45, "passing": 64, "dribbling": 66, "defending": 88, "physicality": 85},
-    "Joshua Kimmich": {"pace": 70, "shooting": 70, "passing": 86, "dribbling": 85, "defending": 82, "physicality": 78},
-    "Giorgio Chiellini": {"pace": 65, "shooting": 50, "passing": 60, "dribbling": 55, "defending": 89, "physicality": 90},
-    "Thiago Silva": {"pace": 60, "shooting": 45, "passing": 65, "dribbling": 60, "defending": 90, "physicality": 88},
-    "Alphonso Davies": {"pace": 96, "shooting": 69, "passing": 75, "dribbling": 85, "defending": 75, "physicality": 77},
-    "Ruben Dias": {"pace": 70, "shooting": 50, "passing": 70, "dribbling": 55, "defending": 90, "physicality": 85},
-    "Jules Kounde": {"pace": 80, "shooting": 55, "passing": 75, "dribbling": 70, "defending": 85, "physicality": 75},
-    "Frenkie de Jong": {"pace": 81, "shooting": 70, "passing": 83, "dribbling": 86, "defending": 76, "physicality": 72},
-    "Memphis Depay": {"pace": 84, "shooting": 79, "passing": 76, "dribbling": 87, "defending": 40, "physicality": 68},
-    "Christian Pulisic": {"pace": 90, "shooting": 75, "passing": 80, "dribbling": 88, "defending": 37, "physicality": 66},
-    "Ciro Immobile": {"pace": 70, "shooting": 88, "passing": 74, "dribbling": 81, "defending": 42, "physicality": 80},
-    "Gini Wijnaldum": {"pace": 78, "shooting": 70, "passing": 82, "dribbling": 75, "defending": 66, "physicality": 72},
-    "Angel Di Maria": {"pace": 86, "shooting": 83, "passing": 85, "dribbling": 88, "defending": 38, "physicality": 70},
-    "Youri Tielemans": {"pace": 77, "shooting": 78, "passing": 83, "dribbling": 80, "defending": 60, "physicality": 73},
-    "David Silva": {"pace": 70, "shooting": 75, "passing": 87, "dribbling": 80, "defending": 41, "physicality": 65},
-    "Mikel Oyarzabal": {"pace": 81, "shooting": 74, "passing": 82, "dribbling": 85, "defending": 49, "physicality": 72},
-    "Domenico Berardi": {"pace": 83, "shooting": 78, "passing": 79, "dribbling": 85, "defending": 36, "physicality": 68},
-    "Pelé": {"pace": 95, "shooting": 99, "passing": 90, "dribbling": 98, "defending": 40, "physicality": 80},
-    "Diego Maradona": {"pace": 88, "shooting": 94, "passing": 91, "dribbling": 99, "defending": 36, "physicality": 70},
-    "Zinedine Zidane": {"pace": 75, "shooting": 92, "passing": 94, "dribbling": 88, "defending": 50, "physicality": 77},
-       "Johan Cruyff": {"pace": 86, "shooting": 90, "passing": 88, "dribbling": 97, "defending": 50, "physicality": 72},
-    "Ronaldinho": {"pace": 92, "shooting": 87, "passing": 85, "dribbling": 99, "defending": 30, "physicality": 65},
-    "Michel Platini": {"pace": 78, "shooting": 91, "passing": 94, "dribbling": 82, "defending": 55, "physicality": 70},
-    "Franz Beckenbauer": {"pace": 82, "shooting": 75, "passing": 88, "dribbling": 80, "defending": 95, "physicality": 85},
-    "Ronaldo Nazário": {"pace": 90, "shooting": 95, "passing": 80, "dribbling": 98, "defending": 30, "physicality": 75},
-    "George Best": {"pace": 92, "shooting": 90, "passing": 80, "dribbling": 99, "defending": 35, "physicality": 70},
-    "Gerd Müller": {"pace": 80, "shooting": 99, "passing": 75, "dribbling": 80, "defending": 30, "physicality": 82},
-    "Alfredo Di Stéfano": {"pace": 85, "shooting": 90, "passing": 87, "dribbling": 92, "defending": 60, "physicality": 80}
+    # Add more players...
 }
 
-# Initialize scores
 player_score = 0
 computer_score = 0
 
+# Game logic for football player card comparison
 def get_stat_value(player, stat):
     return players[player][stat]
 
@@ -72,64 +30,174 @@ def compare_stats(player1, player2, stat):
     else:
         return "Draw"
 
-# Main game loop
-print("Welcome to the Football Player Card Game!")
+# Football card game starts when a level is clicked
+def start_game():
+    global player_score, computer_score
+    player_score = 0
+    computer_score = 0
 
-while True:
-    # Randomly select players for comparison
-    player1 = random.choice(list(players.keys()))
-    player2 = random.choice(list(players.keys()))
-    while player1 == player2:
+    while True:
+        # Randomly select players for comparison
+        player1 = random.choice(list(players.keys()))
         player2 = random.choice(list(players.keys()))
+        while player1 == player2:
+            player2 = random.choice(list(players.keys()))
 
-    print(f"\nPlayer 1: {player1}")
-    print(f"Player 2: {player2}")
+        print(f"\nPlayer 1: {player1}")
+        print(f"Player 2: {player2}")
 
-    # Ask the user for the stat to compare
-    print("\nChoose a stat to compare:")
-    for stat in players[player1].keys():
-        print(f"- {stat.capitalize()}")
+        # Display player 1's card
+        print(f"\nPlayer 1: {player1}")
+        print(f"Pace: {players[player1]['pace']}")
+        print(f"Shooting: {players[player1]['shooting']}")
+        print(f"Passing: {players[player1]['passing']}")
+        print(f"Dribbling: {players[player1]['dribbling']}")
+        print(f"Defending: {players[player1]['defending']}")
+        print(f"Physicality: {players[player1]['physicality']}")
 
-    chosen_stat = input("Enter the stat you want to compare: ").strip().lower()
+        # User selects the stat to compare
+        chosen_stat = input("Choose a stat to compare (pace, shooting, passing, dribbling, defending, physicality): ").lower()
+        if chosen_stat not in players[player1]:
+            print("Invalid stat. Please choose a valid stat.")
+            continue
 
-    while chosen_stat not in players[player1]:
-        print("Invalid stat! Please choose from the following:")
-        for stat in players[player1].keys():
-            print(f"- {stat.capitalize()}")
-        chosen_stat = input("Enter the stat you want to compare: ").strip().lower()
-
-    winner = compare_stats(player1, player2, chosen_stat)
-
-    if winner == "Draw":
-        print("It's a draw!")
-    else:
-        print(f"The winner is: {winner}")
+        # Compare the chosen stat between player1 and player2
+        winner = compare_stats(player1, player2, chosen_stat)
         if winner == player1:
+            print(f"{player1} wins this round!")
             player_score += 1
-            # Computer randomly chooses a stat to compare next
-            computer_stat_choice = random.choice(list(players[player2].keys()))
-            print(f"Computer chooses to compare on {computer_stat_choice.capitalize()} for the next round.")
-        else:
+        elif winner == player2:
+            print(f"{player2} wins this round!")
             computer_score += 1
-            # User can choose a stat next
-            print(f"You will choose the next stat to compare.")
+        else:
+            print("It's a draw!")
 
-    # Display scores
-    print(f"\nCurrent Score: You - {player_score}, Computer - {computer_score}")
+        # Show the current score
+        print(f"\nCurrent Score: Player {player_score} - Computer {computer_score}")
 
-    # Ask if the user wants to continue
-    continue_game = input("Do you want to continue the game? (yes/no): ").strip().lower()
-    if continue_game != 'yes':
-        print("Thanks for playing! Goodbye!")
-        break
+        # Ask if the user wants to play another round
+        play_again = input("\nDo you want to play another round? (yes/no): ").lower()
+        if play_again != "yes":
+            print(f"Final Score: Player {player_score} - Computer {computer_score}")
+            break
 
-# Final scores
-print(f"\nFinal score: You: {player_score}, Computer: {computer_score}")
-if player_score > computer_score:
-    print("Congratulations! You win the game!")
-elif player_score < computer_score:
-    print("Sorry! The computer wins the game!")
-else:
-    print("It's a draw!")
+# Start of graphical home screen using Turtle and Tkinter
+# Initialize turtle window
+screen = turtle.Screen()
+screen.title("Football Home Screen")
+screen.setup(width=800, height=600)
+screen.bgcolor("lightblue")
 
- 
+# Create a turtle object for drawing the screen layout
+drawer = turtle.Turtle()
+drawer.hideturtle()
+
+# Global points variable for level unlocking
+points = 0
+
+# Username (top-left)
+drawer.penup()
+drawer.goto(-350, 250)
+a = input("Enter username:")
+drawer.write(f"Username: {a}", align="left", font=("Arial", 14, "bold"))
+
+# Points and Gems (top-middle)
+drawer.goto(-50, 250)
+drawer.write("Points: 0 | Gems: 0", align="center", font=("Arial", 14, "bold"))
+
+# Leaderboard button (top-right)
+def show_leaderboard():
+    leaderboard_window = tk.Tk()
+    leaderboard_window.title("Leaderboard")
+    ranks = "Rank 1: Player1\nRank 2: Player2\nRank 3: Player3\n...\nRank 10: Player10"
+    label = tk.Label(leaderboard_window, text=ranks, font=("Arial", 12))
+    label.pack()
+    leaderboard_window.mainloop()
+
+drawer.goto(250, 250)
+drawer.write("[Leaderboard]", align="right", font=("Arial", 14, "underline"))
+
+# Bind leaderboard click
+def leaderboard_click(x, y):
+    if 200 < x < 350 and 230 < y < 270:
+        show_leaderboard()
+
+screen.onscreenclick(leaderboard_click)
+
+# Game Shop button (left-middle)
+def open_game_shop():
+    messagebox.showinfo("Game Shop", "Welcome to the Game Shop!")
+
+drawer.goto(-350, 100)
+drawer.write("[Game Shop]", align="left", font=("Arial", 14, "bold"))
+
+# Player Details button (center)
+def show_player_details():
+    messagebox.showinfo("Player Details", "Player details and stats for the account.")
+
+drawer.goto(-50, 0)
+drawer.write("[Player Details]", align="center", font=("Arial", 18, "bold"))
+
+# Team view button (right-middle)
+def show_team_view():
+    messagebox.showinfo("Team View", "Team View with all players and team rating.")
+
+drawer.goto(250, 100)
+drawer.write("[Team: 85]", align="right", font=("Arial", 14, "bold"))
+
+# Play button (below team view)
+def open_levels():
+    levels_window = tk.Tk()
+    levels_window.title("Play Levels")
+    
+    # Create buttons for each level
+    def create_level_button(text, command, color, row, column):
+        button = tk.Button(levels_window, text=text, command=command, bg=color, font=("Arial", 12))
+        button.grid(row=row, column=column, padx=20, pady=20)
+
+    def level_unlocked(level, cost, reward):
+        if messagebox.askyesno("Play Level", f"Play Level {level}?\nCost: {cost} points\nReward: {reward} points"):
+            start_game()  # Launch the card game when a level is played
+
+    create_level_button("Level 1", lambda: level_unlocked(1, 20, 50), "green", 0, 0)
+    create_level_button("Level 2", lambda: level_unlocked(2, 200, 500), "green" if points >= 1000 else "grey", 0, 1)
+    create_level_button("Level 3", lambda: level_unlocked(3, 2500, 4000), "green" if points >= 5000 else "grey", 1, 0)
+    create_level_button("Level 4", lambda: level_unlocked(4, 5000, 7500), "green" if points >= 10000 else "grey", 1, 1)
+    create_level_button("Level 5", lambda: level_unlocked(5, 10000, 15000), "green" if points >= 20000 else "grey", 2, 0)
+
+    levels_window.mainloop()
+
+drawer.goto(250, 50)
+drawer.write("[Play]", align="right", font=("Arial", 14, "bold"))
+
+# Market and Quests buttons (bottom)
+def open_market():
+    messagebox.showinfo("Market", "Welcome to the Market!")
+
+def open_quests():
+    messagebox.showinfo("Quests", "Here are your quests!")
+
+drawer.goto(-200, -200)
+drawer.write("[Market]", align="center", font=("Arial", 14, "bold"))
+
+drawer.goto(200, -200)
+drawer.write("[Quests]", align="center", font=("Arial", 14, "bold"))
+
+# Handle button clicks for Market and Quests
+def button_click(x, y):
+    if -250 < x < -150 and -220 < y < -180:
+        open_market()
+    elif 150 < x < 250 and -220 < y < -180:
+        open_quests()
+    elif 200 < x < 350 and 50 < y < 100:
+        open_levels()
+    elif 200 < x < 350 and 100 < y < 140:
+        show_team_view()
+    elif -100 < x < 100 and -30 < y < 30:
+        show_player_details()
+    elif -350 < x < -250 and 80 < y < 120:
+        open_game_shop()
+
+# Bind the screen to detect clicks on buttons
+screen.onscreenclick(button_click)
+
