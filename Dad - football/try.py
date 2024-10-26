@@ -1,203 +1,161 @@
 import turtle
-import tkinter as tk
-from tkinter import messagebox
 import random
+import sqlite3
 
-# Define a dictionary to store player stats
-players = {
-    "Lionel Messi": {"pace": 80, "shooting": 84, "passing": 88, "dribbling": 92, "defending": 36, "physicality": 63},
-    "Cristiano Ronaldo": {"pace": 76, "shooting": 88, "passing": 77, "dribbling": 80, "defending": 39, "physicality": 79},
-    "Kylian Mbappé": {"pace": 97, "shooting": 88, "passing": 78, "dribbling": 90, "defending": 41, "physicality": 79},
-    "Neymar Jr.": {"pace": 89, "shooting": 83, "passing": 86, "dribbling": 94, "defending": 37, "physicality": 58},
-    # Add more players...
-}
+# Database Setup
+conn = sqlite3.connect('football_game.db')
+cursor = conn.cursor()
 
-player_score = 0
-computer_score = 0
+# Create player table if it doesn't exist
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS players (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    speed INTEGER,
+    passing INTEGER,
+    shooting INTEGER,
+    defending INTEGER,
+    stamina INTEGER
+)
+''')
 
-# Game logic for football player card comparison
-def get_stat_value(player, stat):
-    return players[player][stat]
+# Insert sample players (comment this out if the players are already in the database)
+sample_players = [
+    ("Player 1", 85, 75, 90, 70, 88),
+    ("Player 2", 80, 80, 86, 72, 85),
+    ("Player 3", 78, 82, 88, 80, 82),
+    ("Player 4", 82, 79, 85, 76, 80),
+    ("Player 5", 88, 83, 87, 78, 86),
+    # Add more players as needed
+]
+cursor.executemany('INSERT OR IGNORE INTO players (name, speed, passing, shooting, defending, stamina) VALUES (?, ?, ?, ?, ?, ?)', sample_players)
+conn.commit()
 
-def compare_stats(player1, player2, stat):
-    value1 = get_stat_value(player1, stat)
-    value2 = get_stat_value(player2, stat)
+# Fetch all players
+cursor.execute("SELECT * FROM players")
+players_data = cursor.fetchall()
 
-    if value1 > value2:
-        return player1
-    elif value2 > value1:
-        return player2
-    else:
-        return "Draw"
+# Game Variables
+user_points = 0
+gems = 0
+levels_unlocked = 1
 
-# Football card game starts when a level is clicked
-def start_game():
-    global player_score, computer_score
-    player_score = 0
-    computer_score = 0
-
-    while True:
-        # Randomly select players for comparison
-        player1 = random.choice(list(players.keys()))
-        player2 = random.choice(list(players.keys()))
-        while player1 == player2:
-            player2 = random.choice(list(players.keys()))
-
-        print(f"\nPlayer 1: {player1}")
-        print(f"Player 2: {player2}")
-
-        # Display player 1's card
-        print(f"\nPlayer 1: {player1}")
-        print(f"Pace: {players[player1]['pace']}")
-        print(f"Shooting: {players[player1]['shooting']}")
-        print(f"Passing: {players[player1]['passing']}")
-        print(f"Dribbling: {players[player1]['dribbling']}")
-        print(f"Defending: {players[player1]['defending']}")
-        print(f"Physicality: {players[player1]['physicality']}")
-
-        # User selects the stat to compare
-        chosen_stat = input("Choose a stat to compare (pace, shooting, passing, dribbling, defending, physicality): ").lower()
-        if chosen_stat not in players[player1]:
-            print("Invalid stat. Please choose a valid stat.")
-            continue
-
-        # Compare the chosen stat between player1 and player2
-        winner = compare_stats(player1, player2, chosen_stat)
-        if winner == player1:
-            print(f"{player1} wins this round!")
-            player_score += 1
-        elif winner == player2:
-            print(f"{player2} wins this round!")
-            computer_score += 1
-        else:
-            print("It's a draw!")
-
-        # Show the current score
-        print(f"\nCurrent Score: Player {player_score} - Computer {computer_score}")
-
-        # Ask if the user wants to play another round
-        play_again = input("\nDo you want to play another round? (yes/no): ").lower()
-        if play_again != "yes":
-            print(f"Final Score: Player {player_score} - Computer {computer_score}")
-            break
-
-# Start of graphical home screen using Turtle and Tkinter
-# Initialize turtle window
+# Turtle Screen Setup
 screen = turtle.Screen()
-screen.title("Football Home Screen")
 screen.setup(width=800, height=600)
-screen.bgcolor("lightblue")
+screen.title("Football Card Game")
+screen.bgcolor("green")
 
-# Create a turtle object for drawing the screen layout
-drawer = turtle.Turtle()
-drawer.hideturtle()
+# Interface Display Elements
+username = "Player1"  # You can customize this as needed
 
-# Global points variable for level unlocking
-points = 0
+# Text Display Functions
+def display_text(x, y, text, size=16, color="black"):
+    pen = turtle.Turtle()
+    pen.hideturtle()
+    pen.penup()
+    pen.color(color)
+    pen.goto(x, y)
+    pen.write(text, align="center", font=("Arial", size, "normal"))
 
-# Username (top-left)
-drawer.penup()
-drawer.goto(-350, 250)
-a = input("Enter username:")
-drawer.write(f"Username: {a}", align="left", font=("Arial", 14, "bold"))
+# Button Functions
+def leaderboard():
+    print("Leaderboard pressed")
 
-# Points and Gems (top-middle)
-drawer.goto(-50, 250)
-drawer.write("Points: 0 | Gems: 0", align="center", font=("Arial", 14, "bold"))
+def game_shop():
+    print("Game Shop pressed")
 
-# Leaderboard button (top-right)
-def show_leaderboard():
-    leaderboard_window = tk.Tk()
-    leaderboard_window.title("Leaderboard")
-    ranks = "Rank 1: Player1\nRank 2: Player2\nRank 3: Player3\n...\nRank 10: Player10"
-    label = tk.Label(leaderboard_window, text=ranks, font=("Arial", 12))
-    label.pack()
-    leaderboard_window.mainloop()
+def show_stats():
+    print("Player Stats pressed")
 
-drawer.goto(250, 250)
-drawer.write("[Leaderboard]", align="right", font=("Arial", 14, "underline"))
+def open_team():
+    print("Team button pressed")
 
-# Bind leaderboard click
-def leaderboard_click(x, y):
-    if 200 < x < 350 and 230 < y < 270:
-        show_leaderboard()
-
-screen.onscreenclick(leaderboard_click)
-
-# Game Shop button (left-middle)
-def open_game_shop():
-    messagebox.showinfo("Game Shop", "Welcome to the Game Shop!")
-
-drawer.goto(-350, 100)
-drawer.write("[Game Shop]", align="left", font=("Arial", 14, "bold"))
-
-# Player Details button (center)
-def show_player_details():
-    messagebox.showinfo("Player Details", "Player details and stats for the account.")
-
-drawer.goto(-50, 0)
-drawer.write("[Player Details]", align="center", font=("Arial", 18, "bold"))
-
-# Team view button (right-middle)
-def show_team_view():
-    messagebox.showinfo("Team View", "Team View with all players and team rating.")
-
-drawer.goto(250, 100)
-drawer.write("[Team: 85]", align="right", font=("Arial", 14, "bold"))
-
-# Play button (below team view)
-def open_levels():
-    levels_window = tk.Tk()
-    levels_window.title("Play Levels")
+def start_game():
+    global user_points
+    global levels_unlocked
     
-    # Create buttons for each level
-    def create_level_button(text, command, color, row, column):
-        button = tk.Button(levels_window, text=text, command=command, bg=color, font=("Arial", 12))
-        button.grid(row=row, column=column, padx=20, pady=20)
+    if levels_unlocked > 0:
+        user_points += play_game()  # Game logic adds points
+        if user_points >= levels_unlocked * 10:
+            levels_unlocked += 1
+            print(f"Level {levels_unlocked} unlocked!")
 
-    def level_unlocked(level, cost, reward):
-        if messagebox.askyesno("Play Level", f"Play Level {level}?\nCost: {cost} points\nReward: {reward} points"):
-            start_game()  # Launch the card game when a level is played
+# Draw Buttons
+display_text(-250, 250, username, 18, "white")  # Username display
+display_text(0, 250, f"Points: {user_points}", 18, "white")
+display_text(250, 250, f"Gems: {gems}", 18, "white")
 
-    create_level_button("Level 1", lambda: level_unlocked(1, 20, 50), "green", 0, 0)
-    create_level_button("Level 2", lambda: level_unlocked(2, 200, 500), "green" if points >= 1000 else "grey", 0, 1)
-    create_level_button("Level 3", lambda: level_unlocked(3, 2500, 4000), "green" if points >= 5000 else "grey", 1, 0)
-    create_level_button("Level 4", lambda: level_unlocked(4, 5000, 7500), "green" if points >= 10000 else "grey", 1, 1)
-    create_level_button("Level 5", lambda: level_unlocked(5, 10000, 15000), "green" if points >= 20000 else "grey", 2, 0)
+# Draw buttons and map actions
+leaderboard_button = turtle.Turtle()
+leaderboard_button.shape("square")
+leaderboard_button.color("blue")
+leaderboard_button.shapesize(stretch_wid=1, stretch_len=4)
+leaderboard_button.penup()
+leaderboard_button.goto(250, 200)
+leaderboard_button.onclick(lambda x, y: leaderboard())
 
-    levels_window.mainloop()
+shop_button = turtle.Turtle()
+shop_button.shape("square")
+shop_button.color("blue")
+shop_button.shapesize(stretch_wid=1, stretch_len=4)
+shop_button.penup()
+shop_button.goto(-250, 200)
+shop_button.onclick(lambda x, y: game_shop())
 
-drawer.goto(250, 50)
-drawer.write("[Play]", align="right", font=("Arial", 14, "bold"))
+stats_button = turtle.Turtle()
+stats_button.shape("square")
+stats_button.color("blue")
+stats_button.shapesize(stretch_wid=1, stretch_len=4)
+stats_button.penup()
+stats_button.goto(0, 0)
+stats_button.onclick(lambda x, y: show_stats())
 
-# Market and Quests buttons (bottom)
-def open_market():
-    messagebox.showinfo("Market", "Welcome to the Market!")
+team_button = turtle.Turtle()
+team_button.shape("square")
+team_button.color("blue")
+team_button.shapesize(stretch_wid=1, stretch_len=4)
+team_button.penup()
+team_button.goto(250, 0)
+team_button.onclick(lambda x, y: open_team())
 
-def open_quests():
-    messagebox.showinfo("Quests", "Here are your quests!")
+play_button = turtle.Turtle()
+play_button.shape("square")
+play_button.color("red")
+play_button.shapesize(stretch_wid=2, stretch_len=6)
+play_button.penup()
+play_button.goto(0, -100)
+play_button.onclick(lambda x, y: start_game())
 
-drawer.goto(-200, -200)
-drawer.write("[Market]", align="center", font=("Arial", 14, "bold"))
+# Football Card Game Logic
+def get_random_player():
+    return random.choice(players_data)
 
-drawer.goto(200, -200)
-drawer.write("[Quests]", align="center", font=("Arial", 14, "bold"))
+def play_game():
+    user_score, computer_score = 0, 0
 
-# Handle button clicks for Market and Quests
-def button_click(x, y):
-    if -250 < x < -150 and -220 < y < -180:
-        open_market()
-    elif 150 < x < 250 and -220 < y < -180:
-        open_quests()
-    elif 200 < x < 350 and 50 < y < 100:
-        open_levels()
-    elif 200 < x < 350 and 100 < y < 140:
-        show_team_view()
-    elif -100 < x < 100 and -30 < y < 30:
-        show_player_details()
-    elif -350 < x < -250 and 80 < y < 120:
-        open_game_shop()
+    for _ in range(25):  # 25 rounds
+        user_player = get_random_player()
+        computer_player = get_random_player()
 
-# Bind the screen to detect clicks on buttons
-screen.onscreenclick(button_click)
+        print(f"Your player: {user_player[1]} (Speed: {user_player[2]}, Passing: {user_player[3]}, Shooting: {user_player[4]}, Defending: {user_player[5]}, Stamina: {user_player[6]})")
+        print(f"Computer's player: {computer_player[1]}")
 
+        stat_choice = input("Choose a stat (speed, passing, shooting, defending, stamina): ").strip().lower()
+        
+        # Compare stats
+        user_stat = user_player[2 + ["speed", "passing", "shooting", "defending", "stamina"].index(stat_choice)]
+        computer_stat = computer_player[2 + ["speed", "passing", "shooting", "defending", "stamina"].index(stat_choice)]
+        
+        if user_stat > computer_stat:
+            print("You win this round!")
+            user_score += 1
+        else:
+            print("Computer wins this round!")
+            computer_score += 1
+
+    print(f"Final Score - You: {user_score}, Computer: {computer_score}")
+    return user_score  # Return user's score for points calculation
+
+# Main Loop
+turtle.done()
