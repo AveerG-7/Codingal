@@ -13,7 +13,7 @@ print("welcome to flashcard application")
 #the following loop will be repeated until
 #user stops to add the flashcards
 while(True):
-	word = input("enter the name you want to add to flashcard : ")
+	word = input("enter the word you want to add to flashcard : ")
 	meaning = input("enter the meaning of the word : ")
 	
 	flash.append(flashcard(word, meaning))
