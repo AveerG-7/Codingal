@@ -31,7 +31,7 @@ class Sprite(pygame.sprite.Sprite):
 	def moveBack(self, speed):
 		self.rect.y -= speed * speed/10
 
-bg = pygame.image.load("bg.jpg")
+bg = pygame.image.load("download.jpeg")
 bg = pygame.transform.scale(bg, (500, 400))
 
 pygame.init()
@@ -92,14 +92,7 @@ while exit:
 		# Render the text in new surface  
 		text = font.render(text, True, (158, 16, 16))
 		screen.blit(text,(200 - text.get_width() // 2, 140 - text.get_height() // 2))
-		# Loading the song
-		mixer.music.load("explosion.wav")
 		
-		# Setting the volume
-		mixer.music.set_volume(0.7)
-		
-		# Start playing the song
-		mixer.music.play()
 		
 	pygame.display.update()
 	clock.tick(60)
