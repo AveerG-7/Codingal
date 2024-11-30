@@ -11,19 +11,19 @@ pygame.init()
 screen = pygame.display.set_mode((800, 500))
 
 # Background
-background = pygame.image.load('background.png')
+background = pygame.image.load('bg.jpg')
 
 # Sound
-mixer.music.load("background.wav")
+mixer.music.load("bg music.mp3")
 mixer.music.play(-1)
 
 # Caption and Icon
 pygame.display.set_caption("Space Invader")
-icon = pygame.image.load('ufo.png')
+icon = pygame.image.load('logo.jpeg')
 pygame.display.set_icon(icon)
 
 # Player
-playerImg = pygame.image.load('player.png')
+playerImg = pygame.image.load('spaceship non enemy.jpg')
 playerX = 370
 playerY = 380
 playerX_change = 0
@@ -37,18 +37,18 @@ enemyY_change = []
 num_of_enemies = 6
 
 for i in range(num_of_enemies):
-    enemyImg.append(pygame.image.load('enemy.png'))
+    enemyImg.append(pygame.image.load('spaceship.jpg'))
     enemyX.append(random.randint(0, 736))
     enemyY.append(random.randint(50, 150))
-    enemyX_change.append(4)
-    enemyY_change.append(40)
+    enemyX_change.append(2)
+    enemyY_change.append(20)
 
 # Bullet
 
 # Ready - You can't see the bullet on the screen
 # Fire - The bullet is currently moving
 
-bulletImg = pygame.image.load('bullet.png')
+bulletImg = pygame.image.load('bull.jpg')
 bulletX = 0
 bulletY = 380
 bulletX_change = 0
@@ -119,7 +119,7 @@ while running:
                 playerX_change = 5
             if event.key == pygame.K_SPACE:
                 if bullet_state == "ready":
-                    bulletSound = mixer.Sound("laser.wav")
+                    bulletSound = mixer.Sound("laser shooting sound.mp3")
                     bulletSound.play()
                     # Get the current x cordinate of the spaceship
                     bulletX = playerX
@@ -159,7 +159,7 @@ while running:
         # Collision
         collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
         if collision:
-            explosionSound = mixer.Sound("explosion.wav")
+            explosionSound = mixer.Sound("explosion sound.mp3")
             explosionSound.play()
             bulletY = 380
             bullet_state = "ready"
