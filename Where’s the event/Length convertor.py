@@ -1,5 +1,8 @@
-import tkinter as tk
-from tkinter import messagebox
+try:
+    import tkinter as tk
+    from tkinter import messagebox
+except ImportError:
+    raise ImportError("The tkinter module is not available. Please install tkinter or use a Python environment that includes tkinter.")
 
 def convert():
     try:
@@ -37,4 +40,4 @@ label_result = tk.Label(frame, text="", font=("Arial", 14))
 label_result.grid(row=2, column=0, columnspan=2, pady=10)
 
 # Start the main event loop
-root.mainloop()
+root.mainloop() 
