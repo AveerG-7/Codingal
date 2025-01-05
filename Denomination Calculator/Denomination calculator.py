@@ -36,6 +36,7 @@ def topwin():
     l1 = Label(top, text="2000", bg='light grey')
     l2 = Label(top, text="500", bg='light grey')
     l3 = Label(top, text="100", bg='light grey')
+    l4 = Label(top, text="50", bg='light grey')
     t1 = Entry(top)
     t2 = Entry(top)
     t3 = Entry(top)
@@ -48,6 +49,9 @@ def topwin():
             note500 = amount // 500
             amount %= 500
             note100 = amount // 100
+            amount %=100
+            note50 = amount // 50
+            amount %= 50
             t1.delete(0, END)
             t2.delete(0, END)
             t3.delete(0, END)
@@ -64,6 +68,7 @@ def topwin():
     l1.place(x=180, y=200   )
     l2.place(x=180, y=230   )
     l3.place(x=180, y=260   )
+    l4.place(x=180, y=260   )
     t1.place(x=270, y=200   )
     t2.place(x=270, y=230   )
     t3.place(x=270, y=260)
