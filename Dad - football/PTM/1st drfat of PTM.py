@@ -6,6 +6,8 @@ teachers = {
     'Mr. Smith': ['10:00 AM', '11:00 AM', '12:00 PM'],
     'Ms. Davis': ['09:30 AM', '10:30 AM', '11:30 AM'],
 }
+student_username = {'username':'password@12345','asdfg':'765434kjhgfd5654kjhgf3234565ggfdsaedrtgh43234543','bob':'ice cream@7', 'Cris':'tiano', 'Cr7':'GOAT;'}
+
 
 scheduled_meetings = {}
 
@@ -149,5 +151,6 @@ def login_window():
 
 if __name__ == "__main__":
     login_window()
+
 
 
